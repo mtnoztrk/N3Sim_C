@@ -81,6 +81,7 @@ void findParticleCollisions(Simulation *, int i, double time, SphereCollision *s
 void updatePositions(Simulation *);
 int numParticlesToDelete(Simulation *);
 void emit(Simulation *);
+void updateReceivers(Simulation *);
 char* simulatorToString(Simulation *);
 void writeOutputFile(int type, char* line);
 #endif

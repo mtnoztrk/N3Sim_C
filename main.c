@@ -62,6 +62,10 @@ double getNextDouble(char*, char**, char**, int);
 void error(char*);
 char* err_msg;
 void writeOutputFile(int type, char* line);
+void checkEmitterArraySize(Emitter*, int, int);
+void checkReceiverArraySize(Receiver*e, int len, int total);
+void checkNodeArraySize(Node*e, int len, int total);
+void checkParticleArraySize(Sphere*e, int len, int total);
 /*
 void spaceSetInitialParticles(double, double, double, double, double, Sphere *);
 void spaceInitialParticlesMove(double, double, double, double, bool, bool, Sphere *, int);
@@ -198,7 +202,7 @@ int main(int argc, char *argv[]) {
 	
 	//RectangularSphereEmitter *rectEmitterArray = (RectangularSphereEmitter*)malloc(sizeof(RectangularSphereEmitter)*numEmitters);
 	//NoiseSphereEmitter *noiseEmitterArray = (NoiseSphereEmitter*)malloc(sizeof(NoiseSphereEmitter)*numEmitters);
-	Emitter *emitterArray = (Emitter*)malloc(sizeof(Emitter)*numEmitters);
+	//Emitter *emitterArray = (Emitter*)malloc(sizeof(Emitter)*numEmitters);
 	//WaveFromFileSphereEmitter *waveEmitterArray = (WaveFromFileSphereEmitter*)malloc(sizeof(WaveFromFileSphereEmitter)*numberOfEmitters);
 	//PunctualWaveFromFile3DSphereEmitter *punctualEmitterArray = (PunctualWaveFromFile3DSphereEmitter*)malloc(sizeof(PunctualWaveFromFile3DSphereEmitter)*numberOfEmitters);
 
@@ -222,36 +226,63 @@ int main(int argc, char *argv[]) {
 		case(1) :
 			amplitude = getNextDouble("amplitude", _names, _values, ++index);
 			amplitude = amplitude * timeStep / 100; //change to amplitude per timeStep
-			if (dimension == 1)
-				init_PulseSphereEmitter1D(&emitterArray[i], x, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
-			if (dimension == 2)
-				init_PulseSphereEmitter2D(&emitterArray[i], x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
-			if (dimension == 3) 
-				init_PulseSphereEmitter3D(&emitterArray[i], x, y, z, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+			if (dimension == 1){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_PulseSphereEmitter1D(&S._emitterList[i], x, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+				S._emitterListLen++;
+			}
+			if (dimension == 2){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_PulseSphereEmitter2D(&S._emitterList[i], x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+				S._emitterListLen++;
+			}
+			if (dimension == 3){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_PulseSphereEmitter3D(&S._emitterList[i], x, y, z, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+				S._emitterListLen++;
+			}
 			break;
 		case(2) :
 			amplitude = getNextDouble("amplitude", _names, _values, ++index);
 			amplitude = amplitude * timeStep / 100; //change to amplitude per timeStep
 			period = getNextInt("period", _names, _values, ++index);
 			timeOn = getNextInt("timeOn", _names, _values, ++index);
-			if (dimension == 1)
-				init_RectangularSphereEmitter1D(&emitterArray[i], x, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, period, timeOn, color);
-			if (dimension == 2)
-				init_RectangularSphereEmitter2D(&emitterArray[i], x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, period, timeOn, color);
-			if (dimension == 3) 
-				init_RectangularSphereEmitter3D(&emitterArray[i], x, y, z, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, period, timeOn, color);
+			if (dimension == 1){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_RectangularSphereEmitter1D(&S._emitterList[i], x, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, period, timeOn, color);
+				S._emitterListLen++;
+			}
+			if (dimension == 2){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_RectangularSphereEmitter2D(&S._emitterList[i], x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, period, timeOn, color);
+				S._emitterListLen++;
+			}
+			if (dimension == 3){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_RectangularSphereEmitter3D(&S._emitterList[i], x, y, z, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, period, timeOn, color);
+				S._emitterListLen++;
+			}
 			
 			break;
 		case(3) :
 			amplitude = getNextDouble("amplitude", _names, _values, ++index);
 			amplitude = amplitude * timeStep / 100; //change to amplitude per timeStep0
 			//_d.createNoiseSphereEmitter(x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
-			if (dimension == 1)
-				init_NoiseSphereEmitter1D(&emitterArray[i], x, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
-			if (dimension == 2)
-				init_NoiseSphereEmitter2D(&emitterArray[i], x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
-			if (dimension == 3)
-				init_NoiseSphereEmitter3D(&emitterArray[i], x, y, z, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+			if (dimension == 1){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_NoiseSphereEmitter1D(&S._emitterList[i], x, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+				S._emitterListLen++;
+			}	
+			if (dimension == 2){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_NoiseSphereEmitter2D(&S._emitterList[i], x, y, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+				S._emitterListLen++;
+			}
+			if (dimension == 3){
+				checkEmitterArraySize(S._emitterList, S._emitterListLen, S._emitterListTotal);
+				init_NoiseSphereEmitter3D(&S._emitterList[i], x, y, z, startTime, endTime, amplitude, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color);
+				S._emitterListLen++;
+			}
 			break;
 		case(4) :
 			file = getNextString("file", _names, _values, ++index);
@@ -282,7 +313,7 @@ int main(int argc, char *argv[]) {
 
 	//declaring receiver arrays
 
-	Receiver *receiverArray = (Receiver*)malloc(sizeof(Receiver)*numReceivers);
+	//Receiver *receiverArray = (Receiver*)malloc(sizeof(Receiver)*numReceivers);
 	//SquareReceiver *squareReceiverArray = (SquareReceiver*)malloc(sizeof(SquareReceiver)*numReceivers);
 	//SphericalReceiver *sphericalReceiverArray = (SphericalReceiver*)malloc(sizeof(SphericalReceiver)*numReceivers);
 	//SphericalReceiver3D *sphericalReceiver3DArray = (SphericalReceiver3D*)malloc(sizeof(SphericalReceiver3D)*numReceivers);
@@ -302,24 +333,42 @@ int main(int argc, char *argv[]) {
 		switch (receiverType){
 		case(1) :
 			side = getNextDouble("side", _names, _values, ++index);
-			if (dimension == 1)
-				init_SquareReceiver1D(&receiverArray[i], name, x, absorb, accumulate, side);
-			else if (dimension == 2)
-				init_SquareReceiver2D(&receiverArray[i], name, x, y, absorb, accumulate, side);
-			else if (dimension == 3)
-				init_SquareReceiver3D(&receiverArray[i], name, x, y, z, absorb, accumulate, side);
+			if (dimension == 1){
+				checkReceiverArraySize(S._receiverList, S._receiverListLen, S._receiverListTotal);
+				init_SquareReceiver1D(&S._receiverList[i], name, x, absorb, accumulate, side);
+				S._receiverListLen++;
+			}	
+			else if (dimension == 2){
+				checkReceiverArraySize(S._receiverList, S._receiverListLen, S._receiverListTotal);
+				init_SquareReceiver2D(&S._receiverList[i], name, x, y, absorb, accumulate, side);
+				S._receiverListLen++;
+			}				
+			else if (dimension == 3){
+				checkReceiverArraySize(S._receiverList, S._receiverListLen, S._receiverListTotal);
+				init_SquareReceiver3D(&S._receiverList[i], name, x, y, z, absorb, accumulate, side);
+				S._receiverListLen++;
+			}
 			break;
 		case(2) :
 			rradius = getNextDouble("rradius", _names, _values, ++index);
-			if (dimension == 1)
-				init_SphericalReceiver1D(&receiverArray[i], name, x, absorb, accumulate, rradius);
-			else if (dimension == 2)
-				init_SphericalReceiver2D(&receiverArray[i], name, x, y, absorb, accumulate, rradius);
+			if (dimension == 1){
+				checkReceiverArraySize(S._receiverList, S._receiverListLen, S._receiverListTotal);
+				init_SphericalReceiver1D(&S._receiverList[i], name, x, absorb, accumulate, rradius);
+				S._receiverListLen++;
+			}
+			else if (dimension == 2){
+				checkReceiverArraySize(S._receiverList, S._receiverListLen, S._receiverListTotal);
+				init_SphericalReceiver2D(&S._receiverList[i], name, x, y, absorb, accumulate, rradius);
+				S._receiverListLen++;
+			}
 			break;
 		case(3) :
 			z = getNextDouble("z", _names, _values, ++index);
 			rradius = getNextDouble("rradius", _names, _values, ++index);
-			init_SphericalReceiver3D(&receiverArray[i], name, x, y, z, absorb, accumulate, rradius);
+			checkReceiverArraySize(S._receiverList, S._receiverListLen, S._receiverListTotal);
+			init_SphericalReceiver3D(&S._receiverList[i], name, x, y, z, absorb, accumulate, rradius);
+			S._receiverListLen++;
+			
 			break;
 		default: error("Wrong type of receiver. Receiver not created. Try again"); i--;
 		} // switch
@@ -339,7 +388,7 @@ int main(int argc, char *argv[]) {
 	//SimpleNode *simpleNodeArray = (SimpleNode*)malloc(sizeof(SimpleNode)*numNodes);
 	//ImmediatelyReleasingNode *immediatelyReleasingNodeArray = (ImmediatelyReleasingNode*)malloc(sizeof(ImmediatelyReleasingNode)*numNodes);4
 
-	Node *nodeArray = (Node*)malloc(sizeof(Node)*numNodes);
+	//Node *nodeArray = (Node*)malloc(sizeof(Node)*numNodes);
 
 	for (int i = 0; i < numNodes; i++) {
 
@@ -368,12 +417,21 @@ int main(int argc, char *argv[]) {
 		switch (nodeType) {
 
 		case(1) : // simpleNode
-			if (dimension == 1)
-				init_SimpleNode1D(&nodeArray[i], name, x, numberOfEmitters, numberOfEmitters);
-			else if (dimension == 2)
-				init_SimpleNode2D(&nodeArray[i], name, x, y, numberOfEmitters, numberOfEmitters);
-			else if (dimension == 3)
-				init_SimpleNode3D(&nodeArray[i], name, x, y, z, numberOfEmitters, numberOfEmitters);
+			if (dimension == 1){
+				checkNodeArraySize(S._nodeList, S._nodeListLen, S._nodeListTotal);
+				init_SimpleNode1D(&S._nodeList[i], name, x, numberOfEmitters, numberOfEmitters);
+				S._nodeListLen++;
+			}
+			else if (dimension == 2){
+				checkNodeArraySize(S._nodeList, S._nodeListLen, S._nodeListTotal);
+				init_SimpleNode2D(&S._nodeList[i], name, x, y, numberOfEmitters, numberOfEmitters);
+				S._nodeListLen++;
+			}
+			else if (dimension == 3){
+				checkNodeArraySize(S._nodeList, S._nodeListLen, S._nodeListTotal);
+				init_SimpleNode3D(&S._nodeList[i], name, x, y, z, numberOfEmitters, numberOfEmitters);
+				S._nodeListLen++;
+			}
 			break;
 
 		case(2) : // immediatelyReleasingNode
@@ -384,15 +442,25 @@ int main(int argc, char *argv[]) {
 			concentrationEmitter = getNextBoolean("concentrationEmitter", _names, _values, ++index);
 			color = getNextString("color", _names, _values, ++index);
 
-			if (dimension == 1)
-				init_ImmediatelyReleasingNode1D(&nodeArray[i], name, x, initialSupply, reservoirCapacity, numberOfEmitters,
-				numberOfReceivers, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color, harvesterIndex);
-			else if (dimension == 2)
-				init_ImmediatelyReleasingNode2D(&nodeArray[i], name, x, y, initialSupply, reservoirCapacity, numberOfEmitters,
-				numberOfReceivers, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color, harvesterIndex);
-			else if (dimension == 3)
-				init_ImmediatelyReleasingNode3D(&nodeArray[i], name, x, y, z, initialSupply, reservoirCapacity, numberOfEmitters,
-				numberOfReceivers, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color, harvesterIndex);
+			if (dimension == 1){
+				checkNodeArraySize(S._nodeList, S._nodeListLen, S._nodeListTotal);
+				init_ImmediatelyReleasingNode1D(&S._nodeList[i], name, x, initialSupply, reservoirCapacity, numberOfEmitters,
+					numberOfReceivers, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color, harvesterIndex);
+				S._nodeListLen++;
+			}
+				
+			else if (dimension == 2){
+				checkNodeArraySize(S._nodeList, S._nodeListLen, S._nodeListTotal);
+				init_ImmediatelyReleasingNode2D(&S._nodeList[i], name, x, y, initialSupply, reservoirCapacity, numberOfEmitters,
+					numberOfReceivers, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color, harvesterIndex);
+				S._nodeListLen++;
+			}
+			else if (dimension == 3){
+				checkNodeArraySize(S._nodeList, S._nodeListLen, S._nodeListTotal);
+				init_ImmediatelyReleasingNode3D(&S._nodeList[i], name, x, y, z, initialSupply, reservoirCapacity, numberOfEmitters,
+					numberOfReceivers, sphereRadius, emitterRadius, initV, punctual, concentrationEmitter, color, harvesterIndex);
+				S._nodeListLen++;
+			}
 			break;
 
 		case(3) : // immediatelyPulseReleasingNode
@@ -604,9 +672,9 @@ int main(int argc, char *argv[]) {
 	//free(sphericalReceiver3DArray);
 	//free(sphericalReceiverArray);
 	//free(squareReceiverArray);
-	free(receiverArray);
+	//free(receiverArray);
 	//free emitter and receiver list in nodes
-	free(nodeArray);
+	//free(nodeArray);
 	exit_simulation(&S);
 	//free(particlesList);
 	return 0;
@@ -791,6 +859,35 @@ void error(char* errorMsg) {
 	//DataInterface::writeLineToFile(DataInterface::getErrorsFile(), errorMsg);
 	printf("%s \n", errorMsg);
 };
+
+void checkEmitterArraySize(Emitter*e, int len, int total){
+	if (len + 1 >= total){
+		total *= 2; // double its size if its full
+		e = (Emitter*)realloc(e, sizeof(Emitter)*total);
+	}
+}
+
+void checkReceiverArraySize(Receiver*e, int len, int total){
+	if (len + 1 >= total){
+		total *= 2; // double its size if its full
+		e = (Receiver*)realloc(e, sizeof(Receiver)*total);
+	}
+}
+
+void checkNodeArraySize(Node*e, int len, int total){
+	if (len + 1 >= total){
+		total *= 2; // double its size if its full
+		e = (Node*)realloc(e, sizeof(Node)*total);
+	}
+}
+
+void checkParticleArraySize(Sphere*e, int len, int total){
+	if (len + 1 >= total){
+		total *= 2; // double its size if its full
+		e = (Sphere*)realloc(e, sizeof(Sphere)*total);
+	}
+}
+
 
 /*
 void spaceSetInitialParticles(double _xSize, double _ySize, double _zSize, double _bgConcentration, double _radius, Sphere *_particlesList){

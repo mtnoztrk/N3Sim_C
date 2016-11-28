@@ -628,9 +628,10 @@ void emit(Simulation *S){
 
 	for (int i = 0; i < S->_nodeListLen; i++) {
 		int emittedParticles = 0;
+		//TODO: bunu yap iþte
 		//emittedParticles = emitParticleFromNode(S->_nodeList[i], S->_nodeListLen, S->_time, S->_particlesList, S->_sizeParticlesList);
 		//n.emit(time, _particlesList);
-		// TODO emitter dosyasinin bos olmasini istemiyorsan, orjinal siniflarin geri donus degerlerini duzelt
+		//TODO: emitter dosyasinin bos olmasini istemiyorsan, orjinal siniflarin geri donus degerlerini duzelt
 		//DataInterface.writeLineToFile("emitter_" + n.getFileName(), strPre(time) + DataInterface.getCsvSeparator() + emittedParticles);
 	}
 }
@@ -638,24 +639,23 @@ void emit(Simulation *S){
 void updateReceivers(Simulation *S){
 	int numParticles;
 	int numberOfReceivers;
-	int i;
+	//int i;
 
 	//Collections.sort(_particlesList, new ParticleXComparator());
 	//TODO: SORT this
 	// Updating receivers
 	for (int i = 0; i < S->_receiverListLen; i++){
-		r = S->_receiverList[i];
-		numParticles = r.count(_particlesList);
-		DataInterface.writeLineToFile(r.getFileName(), strPre(time) + DataInterface.getCsvSeparator() + numParticles);
+		numParticles = count(&S->_receiverList[i], S->_particlesList, S->_sizeParticlesList);
+		//DataInterface.writeLineToFile(r.getFileName(), strPre(time) + DataInterface.getCsvSeparator() + numParticles);
 	}
 
 	// Updating nodes
-	for (Node n : _nodesList) {
-		numberOfReceivers = n.getNumberOfReceivers();
+	for (int j = 0; j < S->_nodeListLen; j++) {
+		numberOfReceivers = S->_nodeList[j]._numberOfReceivers;
 
-		for (i = 0; i < numberOfReceivers; i++) {
-			numParticles = n.count(i, _particlesList);
-			DataInterface.writeLineToFile("receiver_" + i + "_" + n.getFileName(), strPre(time) + DataInterface.getCsvSeparator() + numParticles);
+		for (int i = 0; i < numberOfReceivers; i++) {
+			numParticles = countNode(&S->_nodeList[j],S->_particlesList, S->_sizeParticlesList, i);//n.count(i, _particlesList);
+			//DataInterface.writeLineToFile("receiver_" + i + "_" + n.getFileName(), strPre(time) + DataInterface.getCsvSeparator() + numParticles);
 		}
 	}
 }
@@ -815,6 +815,12 @@ void addPulseSphereEmitterToNode1D(Simulation *S, char* nodeName, double x, doub
 
 void exit_simulation(Simulation *S){
 	free(S->_verticalBoundariesList);
+	//for (int i = 0; i < S->_emitterListLen; i++){
+	//	free(S->_emitterList[i].)
+	//}
+	free(S->_emitterList);
+	free(S->_receiverList);
+	free(S->_nodeList);
 	//if (S->_horizontalBoundariesList != NULL)
 	//	free(S->_horizontalBoundariesList);
 	//free(S->_particlesList);
